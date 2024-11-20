@@ -1,6 +1,6 @@
 from urllib.parse import urlparse, parse_qs, urlencode
 
-def get_url_pdf(url):
+def transform_url_pdf(url):
     # Fazer o parsing da URL
     parsed_url = urlparse(url)
 
