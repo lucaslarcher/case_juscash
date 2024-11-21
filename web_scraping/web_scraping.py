@@ -2,7 +2,6 @@ from get_urls import  get_urls_pdf
 from data_extract_pdf import extract_data
 from transform_url_pdf import transform_url_pdf
 
-
 urls = get_urls_pdf()
 print(urls)
 
