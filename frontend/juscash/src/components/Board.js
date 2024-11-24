@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { getProcessos, updateProcessoStatus } from '../api/api';
 import Card from './Card';
 import { useDrop } from 'react-dnd';
+import '../styles/Board.css'; 
+
 
 const Board = () => {
   const [processos, setProcessos] = useState([]);
+  const [modalProcesso, setModalProcesso] = useState(null);
 
   // Carregar os processos do backend
   useEffect(() => {
@@ -29,10 +32,20 @@ const Board = () => {
     moveCard(item.processo, status);  // Atualiza o status do processo ao ser solto em uma nova coluna
   };
 
+  // Função para abrir o modal com as informações do processo
+  const openModal = (processo) => {
+    setModalProcesso(processo);  // Armazenando o processo no estado do modal
+  };
+
+  // Função para fechar o modal
+  const closeModal = () => {
+    setModalProcesso(null);
+  };
+
   // Definição dos drop targets (colunas)
   const [{ isOver: isOverNovaPublicacao }, dropNovaPublicacao] = useDrop({
     accept: 'CARD',
-    drop: (item) => handleDrop(item, 'Publicações Novas'),  // Atualiza para "em andamento" ao ser solto nesta coluna
+    drop: (item) => handleDrop(item, 'Publicações Novas'),
   });
 
   const [{ isOver: isOverPublicacaoLida }, dropPublicacaoLida] = useDrop({
@@ -60,6 +73,7 @@ const Board = () => {
             <Card
               key={processo.processo}
               processo={processo}
+              onClick={openModal}  // Passando a função openModal como prop
             />
           ))}
       </div>
@@ -72,6 +86,7 @@ const Board = () => {
             <Card
               key={processo.processo}
               processo={processo}
+              onClick={openModal}
             />
           ))}
       </div>
@@ -84,6 +99,7 @@ const Board = () => {
             <Card
               key={processo.processo}
               processo={processo}
+              onClick={openModal}
             />
           ))}
       </div>
@@ -96,9 +112,30 @@ const Board = () => {
             <Card
               key={processo.processo}
               processo={processo}
+              onClick={openModal}
             />
           ))}
       </div>
+
+      {modalProcesso && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Detalhes do Processo</h2>
+            <p>Processo: {modalProcesso.processo}</p>
+            <p>Data: {modalProcesso.data_disponibilizacao}</p>
+            <p>Autor(es): {modalProcesso.autor}</p>
+            <p>Réu: {modalProcesso.reu}</p>
+            <p>Advogado(s): {modalProcesso.advogado}</p>
+            <p>Valor Principal: R$ {modalProcesso.valor_principal_bruto}</p>
+            <p>Juros Moratórios: R$ {modalProcesso.juros_moratorios}</p>
+            <p>Honorários: R$ {modalProcesso.honorarios_adv}</p>
+            <p>Conteúdo: {modalProcesso.conteudo_publicacao}</p>
+            <label htmlFor="closeModal" className="close-btn">×</label> {/* Label com o "X" */}
+            <input type="checkbox" id="closeModal" style={{ display: 'none' }} onChange={closeModal} /> {/* Caixa de seleção oculta para controlar o clique */}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-const Card = ({ processo }) => {
+const Card = ({ processo, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'CARD',
     item: { processo: processo.processo, status: processo.status },
@@ -9,6 +9,11 @@ const Card = ({ processo }) => {
       isDragging: monitor.isDragging(),
     }),
   });
+
+  // A função handleClick chama o onClick passado como prop
+  const handleClick = () => {
+    onClick(processo);  // Chamando a função openModal com o processo
+  };
 
   return (
     <div
@@ -21,6 +26,7 @@ const Card = ({ processo }) => {
         marginBottom: '10px',
         backgroundColor: '#fff',
       }}
+      onClick={handleClick}  // Adicionando o evento de clique
     >
       <h3>{processo.processo}</h3>
       <p>{processo.data_disponibilizacao}</p>
