@@ -1,6 +1,6 @@
 import React from 'react';
-import './styles/AppCard.css';
-import Board from './components/Board';
+import '../styles/AppCard.css';
+import Board from '../components/Board';
 
 function AppCard() {
   return (

@@ -5,7 +5,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'; // Importando o backend 
 
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
-import AppCard from './AppCard';
+import AppCard from './pages/AppCard';
 import Header from './components/Header';
 
 function App() {
