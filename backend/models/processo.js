@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('./database');
+const sequelize = require('../config/database');
 
 const Processo = sequelize.define('Processo', {
     processo: { type: DataTypes.STRING, primaryKey: true,allowNull: false},

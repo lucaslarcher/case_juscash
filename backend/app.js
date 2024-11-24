@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const sequelize = require('./models/database');
+const sequelize = require('./config/database');
 const processosRoutes = require('./routes/processos');
 const usuariosRoutes = require('./routes/usuarios');
+const authRoutes = require('./routes/auth');
 const authMiddleware = require('./middleware/authMiddleware'); // Middleware de autenticação JWT
 const cors = require('cors'); // Importando o pacote CORS
 
@@ -25,9 +26,11 @@ app.use(bodyParser.json());
 // Rotas públicas
 app.use('/processos', processosRoutes);
 app.use('/usuarios', usuariosRoutes);
+app.use('/auth', authRoutes);
+
 
 // Rota protegida com middleware JWT
-app.use('/usuarios', authMiddleware, usuariosRoutes);  // Proteger todas as rotas dentro de /usuarios
+//app.use('/processos', authMiddleware, processosRoutes);  // Proteger todas as rotas dentro de /usuarios
 
 sequelize.sync().then(() => {
     console.log('Banco de dados sincronizado.');
