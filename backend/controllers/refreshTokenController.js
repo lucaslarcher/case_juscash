@@ -97,19 +97,12 @@ exports.login = async (req, res) => {
         return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
     }
 
-    console.log('Requisição recebida:', { email, password });
-
     try {
         const user = await User.findOne({ where: { email } });
 
         if (!user || !user.senha) {
             return res.status(401).json({ error: 'Credenciais inválidas.' });
         }
-
-        // Logando as informações para depuração
-        console.log('Usuário encontrado:', user);
-        console.log('Senha fornecida:', password);
-        console.log('Senha armazenada (hash):', user.senha);
 
         const isValidPassword = await bcrypt.compare(password, user.senha);
 

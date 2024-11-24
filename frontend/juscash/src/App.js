@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import AppCard from './pages/AppCard';
 import Header from './components/Header';
+import ProtectedRoute from './components/ProtectedRoute'; // Importando o componente ProtectedRoute
 
 function App() {
   return (
@@ -29,8 +30,17 @@ function MainContent() {
       <div className="main-content">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<AppCard />} />
           <Route path="/signup" element={<SignUpPage />} />
+          
+          {/* Rota protegida */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <AppCard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </>
