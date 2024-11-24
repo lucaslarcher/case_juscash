@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { getProcessos, updateProcessoStatus } from '../api/api';
 import Card from './Card';
 import { useDrop } from 'react-dnd';
-import '../styles/Board.css'; 
-
+import '../styles/Board.css';
 
 const Board = () => {
   const [processos, setProcessos] = useState([]);
   const [modalProcesso, setModalProcesso] = useState(null);
+  const [error, setError] = useState(false); // Estado para controlar a flag de erro
 
   // Carregar os processos do backend
   useEffect(() => {
@@ -20,21 +20,51 @@ const Board = () => {
 
   // Função para atualizar o status de um processo
   const moveCard = async (id, status) => {
-    await updateProcessoStatus(id, status);  // Atualiza o status do processo no backend
+    await updateProcessoStatus(id, status); // Atualiza o status do processo no backend
     const updatedProcessos = processos.map((p) =>
       p.processo === id ? { ...p, status } : p
     );
-    setProcessos(updatedProcessos);  // Atualiza o estado com o novo status
+    setProcessos(updatedProcessos); // Atualiza o estado com o novo status
+  };
+
+
+  // Mapeamento para regras de movimentação
+  const statusHierarchy = {
+    'Publicações Novas': 1,
+    'Publicações Lidas': 2,
+    'Publicações Enviadas para ADV': 3,
+    'Concluídas': 4,
+  };
+
+  const validarMovimento = (origem, destino) => {
+    const origemLevel = statusHierarchy[origem];
+    const destinoLevel = statusHierarchy[destino];
+
+    if (
+      (origemLevel === 1) || // De Nova Publicação pode ir para qualquer lugar
+      (origemLevel === 2 && destinoLevel >= 2) || // De Publicações Lidas para 2, 3 ou 4
+      (origemLevel === 3 && destinoLevel >= 2 && destinoLevel <= 4) || // De Enviadas para ADV para 2, 3 ou 4
+      (origemLevel === 4 && destinoLevel === 4) // Concluídas só pode ficar em Concluídas
+    ) {
+      return true;
+    }
+    return false;
   };
 
   // Função para lidar com o drop do card nas colunas
   const handleDrop = (item, status) => {
-    moveCard(item.processo, status);  // Atualiza o status do processo ao ser solto em uma nova coluna
+    const colunaOrigem = item.status; // Status da coluna original do card
+    if (validarMovimento(colunaOrigem, status)) {
+      moveCard(item.processo, status); // Atualiza o status do processo ao ser solto em uma nova coluna
+      setError(false); // Limpa a flag de erro se o movimento for válido
+    } else {
+      setError(true); // Exibe a flag de erro caso o movimento seja inválido
+    }
   };
 
   // Função para abrir o modal com as informações do processo
   const openModal = (processo) => {
-    setModalProcesso(processo);  // Armazenando o processo no estado do modal
+    setModalProcesso(processo); // Armazenando o processo no estado do modal
   };
 
   // Função para fechar o modal
@@ -65,6 +95,21 @@ const Board = () => {
 
   return (
     <div className="board">
+      {error && (
+        <>
+          <div className="error-modal-overlay"></div>
+          <div className="error-modal">
+            <button
+              className="error-modal-close-btn"
+              onClick={() => setError(false)} // Fecha o modal ao clicar no "X"
+            >
+              &times; {/* Ícone de "X" */}
+            </button>
+            Movimento restrito! Não é permitido voltar para colunas anteriores, exceto de "Enviado para ADV" para "Publicação Lida".
+          </div>
+        </>
+      )}
+
       <div className="column" ref={dropNovaPublicacao} style={{ border: isOverNovaPublicacao ? '2px dashed #000' : '' }}>
         <h2>Nova Publicação</h2>
         {processos
@@ -73,7 +118,7 @@ const Board = () => {
             <Card
               key={processo.processo}
               processo={processo}
-              onClick={openModal}  // Passando a função openModal como prop
+              onClick={openModal} // Passando a função openModal como prop
             />
           ))}
       </div>
@@ -135,7 +180,6 @@ const Board = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

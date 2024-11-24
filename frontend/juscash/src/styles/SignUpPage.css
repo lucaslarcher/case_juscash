@@ -1,53 +1,74 @@
 /* src/pages/SignUpPage.css */
+
+/* Container principal, centralizando na tela */
 .sign-up-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    text-align: center;
-    color: #005b99;
-  }
-  
-  form div {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    font-weight: bold;
-    display: block;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  button.submit-btn {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button.submit-btn:hover {
-    background-color: #218838;
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 14px;
-    text-align: center;
-  }  
+  display: flex;
+  justify-content: center; /* Alinha horizontalmente */
+  max-height: 500px;
+  padding: 20px;
+  margin: 50px auto; /* Desgrudar do topo e centralizar horizontalmente */
+  box-sizing: border-box;
+  margin-top: 50px; /* Afastando do topo, mesma distância do Login */
+}
+
+.sign-up-form {
+  width: 100%;
+  max-width: 400px; /* Limita a largura do formulário */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #005b99;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+button.submit-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.submit-btn:hover {
+  background-color: #218838;
+}
+
+button.submit-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+}
