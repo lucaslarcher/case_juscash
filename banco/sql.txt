@@ -1,0 +1,31 @@
+-- Tabela de Usuários
+CREATE TABLE "Usuario" (
+    id SERIAL PRIMARY KEY,        -- Identificador único do usuário
+    nome VARCHAR(255) NOT NULL,   -- Nome do usuário
+    email VARCHAR(255) UNIQUE NOT NULL, -- Email do usuário (único)
+    senha VARCHAR(255) NOT NULL   -- Senha do usuário (hash)
+);
+
+-- Tabela de Processos
+CREATE TABLE "Processo" (
+    id SERIAL PRIMARY KEY,                  -- Número do processo (identificador único)
+    data_disponibilizacao DATE NOT NULL,    -- Data de disponibilização
+    autor TEXT NOT NULL,                    -- Autor(es), texto para múltiplos nomes
+    advogado TEXT NOT NULL,                 -- Advogado(s), texto para múltiplos nomes
+    conteudo_publicacao TEXT NOT NULL,      -- Conteúdo inteiro da publicação
+    valor_principal_bruto DECIMAL(15, 2),   -- Valor principal bruto/líquido
+    juros_moratorios DECIMAL(15, 2),        -- Valor dos juros moratórios
+    honorarios_adv DECIMAL(15, 2),          -- Honorários advocatícios
+    reu TEXT NOT NULL                       -- Réu
+);
+
+-- Tabela de Tokens JWT
+CREATE TABLE "Token" (
+    id SERIAL PRIMARY KEY,               -- Identificador único do token
+    user_id INT REFERENCES "Usuario" (id) ON DELETE CASCADE, -- Relacionamento com o usuário
+    token TEXT NOT NULL,                 -- O token JWT gerado
+    refresh_token TEXT,                  -- Token de refresh, caso exista
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data e hora em que o token foi gerado
+    expires_at TIMESTAMP,               -- Data e hora de expiração do token
+    is_revoked BOOLEAN DEFAULT FALSE     -- Indica se o token foi revogado
+);

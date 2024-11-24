@@ -1,0 +1,7 @@
+mkdir backend
+cd backend
+npm init -y
+npm install express pg sequelize body-parser dotenv pg-hstore
+
+
+node app.js

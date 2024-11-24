@@ -1,0 +1,5 @@
+cd frontend
+npx create-react-app juscash-login
+
+
+npm start
